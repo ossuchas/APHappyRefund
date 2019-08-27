@@ -124,7 +124,6 @@ def getListData():
 	  AND ISNULL(email_sent_status,'N') <> 'Y'
 	  ORDER BY createdate
     """
-    print(strSQL)
 
     myConnDB = ConnectDB()
     result_set = myConnDB.query(strSQL)
@@ -139,6 +138,10 @@ def getListData():
 def main(dfltVal):
     # Get Project ID List
     hyrfs = getListData()
+    
+    if not hyrfs:
+        print("No Data Found..!!")
+        logging.info("No Data found to process Data")
 
     for hyrf in hyrfs:
         print(hyrf)
@@ -196,4 +199,5 @@ if __name__ == '__main__':
     logging.debug('#####################')
     logging.info('Start Process')
     main(dfltVal)
+    logging.info('End Process')
     logging.debug('#####################')
