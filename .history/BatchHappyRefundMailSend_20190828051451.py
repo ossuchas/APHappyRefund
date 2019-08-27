@@ -113,17 +113,54 @@ def send_email(subject, message, from_email, to_email=[], attachment=[]):
     email.quit()
     return;
 
-def getListData():
+def getListData(bg_id, project_id):
+    str_selbg = None
+    str_project =None
+    if bg_id != 99:
+        str_selbg = "AND PType IN ('{}') ".format(bg_id)
+    else:
+        str_selbg = "AND PType IN ('1','2','3','4') "
+    
+    if project_id != 99:
+        str_project = "AND ProductID = '{}' ".format(project_id)
+    else:
+        str_project = "AND 1=1 "
 
     strSQL = """
-    --SELECT personcardid, fullname, nationality, mobile, email, contractnumber
-    SELECT hyrf_id
-    FROM dbo.crm_contact_refund
-    WHERE email LIKE '%_@__%.__%'
-      AND PATINDEX('%[^a-z,0-9,@,.,_,\-]%', email) = 0
-	  AND ISNULL(email_sent_status,'N') <> 'Y'
-	  ORDER BY createdate
-    """
+     SELECT ProductID from dbo.ICON_EntForms_Products With(NoLock) 
+     WHERE RTPExcusive=1 
+     --AND PType IN ('1','2','3','4')
+     --AND PType IN ('1')
+     {}
+     {}
+     AND productid NOT IN (
+         SELECT p.ProductID
+         FROM dbo.ICON_EntForms_Products p
+         LEFT JOIN (
+             SELECT ProductID,COUNT(*) AS unit
+             FROM dbo.ICON_EntForms_Unit
+             WHERE AssetType IN (2,4)
+             GROUP BY ProductID
+         ) U ON U.ProductID = p.ProductID
+     LEFT JOIN (
+      SELECT ProductID,
+     	   COUNT(*) AS ntransfer,
+     	   MAX(TransferDateApprove) LastTransferDate
+     FROM dbo.ICON_EntForms_Transfer t
+     	LEFT JOIN dbo.ICON_EntForms_Agreement a
+     		ON a.ContractNumber = t.ContractNumber
+     WHERE t.TransferDateApprove IS NOT NULL
+     GROUP BY ProductID
+     ) T ON T.ProductID = p.ProductID
+     WHERE ISNULL(unit,0)=ISNULL(ntransfer,0)
+     AND ISNULL(unit,0)>0
+     --AND p.PType IN ('1','2','3','4')
+     {}
+     AND p.RTPExcusive = 1
+     AND DATEDIFF(DAY, T.LastTransferDate ,GETDATE()) >= 30
+     )
+     Order by 1; 
+    """.format(bg_id, project_id, bg_id)
     print(strSQL)
 
     myConnDB = ConnectDB()
@@ -131,51 +168,45 @@ def getListData():
     returnVal = []
 
     for row in result_set:
-        returnVal.append(row.hyrf_id)
+        returnVal.append(row.ProductID)
 
     return returnVal
 
 
 def main(dfltVal):
-    # Get Project ID List
-    hyrfs = getListData()
+    last_month = datetime.now() - relativedelta(months=1)
 
-    for hyrf in hyrfs:
-        print(hyrf)
-    
-    # last_month = datetime.now() - relativedelta(months=1)
+    # parameter date format dd/mm/yyyy for filename
+    starting_day_of_current_year = format(datetime.now().date().replace(month=1, day=1), '%Y%m%d')
+    yesterday = format(datetime.now() - timedelta(days=1), '%Y%m%d')
 
-    # # parameter date format dd/mm/yyyy for filename
-    # starting_day_of_current_year = format(datetime.now().date().replace(month=1, day=1), '%Y%m%d')
-    # yesterday = format(datetime.now() - timedelta(days=1), '%Y%m%d')
+    # parameter date format dd/mm/yyyy for subject mail and body mail
+    vs_parm_start = format(datetime.now().date().replace(month=1, day=1), '%d/%m/%Y')
+    vs_parm_yest = format(datetime.now() - timedelta(days=1), '%d/%m/%Y')
+    vs_parm_date = "{}-{}".format(vs_parm_start, vs_parm_yest)
 
-    # # parameter date format dd/mm/yyyy for subject mail and body mail
-    # vs_parm_start = format(datetime.now().date().replace(month=1, day=1), '%d/%m/%Y')
-    # vs_parm_yest = format(datetime.now() - timedelta(days=1), '%d/%m/%Y')
-    # vs_parm_date = "{}-{}".format(vs_parm_start, vs_parm_yest)
+    fileName = "{}_{}-{}.xls".format(dfltVal[1], starting_day_of_current_year, yesterday)
 
-    # fileName = "{}_{}-{}.xls".format(dfltVal[1], starting_day_of_current_year, yesterday)
+    # logging.info("Generate Data to Excel File Start")
+    # genData2Xls(dfltVal[0], fileName)
+    # logging.info("Generate Data to Excel File Finish")
 
-    # # logging.info("Generate Data to Excel File Start")
-    # # genData2Xls(dfltVal[0], fileName)
-    # # logging.info("Generate Data to Excel File Finish")
+    logging.info("Send Mail Start")
+    sender = 'no-reply@apthai.com'
+    receivers = dfltVal[2].split(';')
 
-    # logging.info("Send Mail Start")
-    # sender = 'no-reply@apthai.com'
-    # receivers = dfltVal[2].split(';')
+    subject = "{} ({})".format(dfltVal[3], vs_parm_date)
+    bodyMsg_tmp = dfltVal[4].replace("PERIOD_MONTH", vs_parm_date)
+    bodyMsg = "{}{}".format(bodyMsg_tmp, dfltVal[5])
 
-    # subject = "{} ({})".format(dfltVal[3], vs_parm_date)
-    # bodyMsg_tmp = dfltVal[4].replace("PERIOD_MONTH", vs_parm_date)
-    # bodyMsg = "{}{}".format(bodyMsg_tmp, dfltVal[5])
+    logging.debug("receivers = {}".format(receivers))
+    logging.debug("subject = {}".format(subject))
+    logging.debug("fileName = {}".format(fileName))
+    logging.debug("bodyMsg = {}".format(bodyMsg))
 
-    # logging.debug("receivers = {}".format(receivers))
-    # logging.debug("subject = {}".format(subject))
-    # logging.debug("fileName = {}".format(fileName))
-    # logging.debug("bodyMsg = {}".format(bodyMsg))
+    attachedFile = [fileName]
 
-    # attachedFile = [fileName]
-
-    # send_email(subject, bodyMsg, sender, receivers, attachedFile)
+    send_email(subject, bodyMsg, sender, receivers, attachedFile)
     logging.info("Successfully sent email")
 
 
@@ -183,9 +214,8 @@ if __name__ == '__main__':
     # Get Default Parameter from DB
     dfltVal = getDfltParam()
 
-    # log_path = dfltVal[6]
-    log_path = '.'
-    logFile = log_path + '/BatchHappyRefundMailSend.log'
+    log_path = dfltVal[6]
+    logFile = log_path + '\BatchHappyRefundMailSend.log'
 
     logging.basicConfig(level=logging.DEBUG,
                         format='%(asctime)-5s [%(levelname)-8s] >> %(message)s',

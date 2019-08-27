@@ -117,7 +117,7 @@ def getListData():
 
     strSQL = """
     --SELECT personcardid, fullname, nationality, mobile, email, contractnumber
-    SELECT hyrf_id
+    SELECT email
     FROM dbo.crm_contact_refund
     WHERE email LIKE '%_@__%.__%'
       AND PATINDEX('%[^a-z,0-9,@,.,_,\-]%', email) = 0
@@ -131,51 +131,45 @@ def getListData():
     returnVal = []
 
     for row in result_set:
-        returnVal.append(row.hyrf_id)
+        returnVal.append(row.ProductID)
 
     return returnVal
 
 
 def main(dfltVal):
-    # Get Project ID List
-    hyrfs = getListData()
+    last_month = datetime.now() - relativedelta(months=1)
 
-    for hyrf in hyrfs:
-        print(hyrf)
-    
-    # last_month = datetime.now() - relativedelta(months=1)
+    # parameter date format dd/mm/yyyy for filename
+    starting_day_of_current_year = format(datetime.now().date().replace(month=1, day=1), '%Y%m%d')
+    yesterday = format(datetime.now() - timedelta(days=1), '%Y%m%d')
 
-    # # parameter date format dd/mm/yyyy for filename
-    # starting_day_of_current_year = format(datetime.now().date().replace(month=1, day=1), '%Y%m%d')
-    # yesterday = format(datetime.now() - timedelta(days=1), '%Y%m%d')
+    # parameter date format dd/mm/yyyy for subject mail and body mail
+    vs_parm_start = format(datetime.now().date().replace(month=1, day=1), '%d/%m/%Y')
+    vs_parm_yest = format(datetime.now() - timedelta(days=1), '%d/%m/%Y')
+    vs_parm_date = "{}-{}".format(vs_parm_start, vs_parm_yest)
 
-    # # parameter date format dd/mm/yyyy for subject mail and body mail
-    # vs_parm_start = format(datetime.now().date().replace(month=1, day=1), '%d/%m/%Y')
-    # vs_parm_yest = format(datetime.now() - timedelta(days=1), '%d/%m/%Y')
-    # vs_parm_date = "{}-{}".format(vs_parm_start, vs_parm_yest)
+    fileName = "{}_{}-{}.xls".format(dfltVal[1], starting_day_of_current_year, yesterday)
 
-    # fileName = "{}_{}-{}.xls".format(dfltVal[1], starting_day_of_current_year, yesterday)
+    # logging.info("Generate Data to Excel File Start")
+    # genData2Xls(dfltVal[0], fileName)
+    # logging.info("Generate Data to Excel File Finish")
 
-    # # logging.info("Generate Data to Excel File Start")
-    # # genData2Xls(dfltVal[0], fileName)
-    # # logging.info("Generate Data to Excel File Finish")
+    logging.info("Send Mail Start")
+    sender = 'no-reply@apthai.com'
+    receivers = dfltVal[2].split(';')
 
-    # logging.info("Send Mail Start")
-    # sender = 'no-reply@apthai.com'
-    # receivers = dfltVal[2].split(';')
+    subject = "{} ({})".format(dfltVal[3], vs_parm_date)
+    bodyMsg_tmp = dfltVal[4].replace("PERIOD_MONTH", vs_parm_date)
+    bodyMsg = "{}{}".format(bodyMsg_tmp, dfltVal[5])
 
-    # subject = "{} ({})".format(dfltVal[3], vs_parm_date)
-    # bodyMsg_tmp = dfltVal[4].replace("PERIOD_MONTH", vs_parm_date)
-    # bodyMsg = "{}{}".format(bodyMsg_tmp, dfltVal[5])
+    logging.debug("receivers = {}".format(receivers))
+    logging.debug("subject = {}".format(subject))
+    logging.debug("fileName = {}".format(fileName))
+    logging.debug("bodyMsg = {}".format(bodyMsg))
 
-    # logging.debug("receivers = {}".format(receivers))
-    # logging.debug("subject = {}".format(subject))
-    # logging.debug("fileName = {}".format(fileName))
-    # logging.debug("bodyMsg = {}".format(bodyMsg))
+    attachedFile = [fileName]
 
-    # attachedFile = [fileName]
-
-    # send_email(subject, bodyMsg, sender, receivers, attachedFile)
+    send_email(subject, bodyMsg, sender, receivers, attachedFile)
     logging.info("Successfully sent email")
 
 
@@ -183,9 +177,8 @@ if __name__ == '__main__':
     # Get Default Parameter from DB
     dfltVal = getDfltParam()
 
-    # log_path = dfltVal[6]
-    log_path = '.'
-    logFile = log_path + '/BatchHappyRefundMailSend.log'
+    log_path = dfltVal[6]
+    logFile = log_path + '\BatchHappyRefundMailSend.log'
 
     logging.basicConfig(level=logging.DEBUG,
                         format='%(asctime)-5s [%(levelname)-8s] >> %(message)s',

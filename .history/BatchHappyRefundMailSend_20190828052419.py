@@ -183,9 +183,8 @@ if __name__ == '__main__':
     # Get Default Parameter from DB
     dfltVal = getDfltParam()
 
-    # log_path = dfltVal[6]
-    log_path = '.'
-    logFile = log_path + '/BatchHappyRefundMailSend.log'
+    log_path = dfltVal[6]
+    logFile = log_path + '\BatchHappyRefundMailSend.log'
 
     logging.basicConfig(level=logging.DEBUG,
                         format='%(asctime)-5s [%(levelname)-8s] >> %(message)s',
