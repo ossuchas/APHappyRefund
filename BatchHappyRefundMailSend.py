@@ -182,22 +182,23 @@ def main(dfltVal):
     # # genData2Xls(dfltVal[0], fileName)
     # # logging.info("Generate Data to Excel File Finish")
 
-    # logging.info("Send Mail Start")
-    # sender = 'no-reply@apthai.com'
+    logging.info("Send Mail Start")
+    sender = 'no-reply@apthai.com'
     # receivers = dfltVal[2].split(';')
+    receivers = 'suchat_s@apthai.com'
 
-    # subject = "{} ({})".format(dfltVal[3], vs_parm_date)
+    subject = "{}".format('test send mail happy refund')
     # bodyMsg_tmp = dfltVal[4].replace("PERIOD_MONTH", vs_parm_date)
-    # bodyMsg = "{}{}".format(bodyMsg_tmp, dfltVal[5])
+    bodyMsg = "{}".format('mail body')
 
     # logging.debug("receivers = {}".format(receivers))
     # logging.debug("subject = {}".format(subject))
     # logging.debug("fileName = {}".format(fileName))
     # logging.debug("bodyMsg = {}".format(bodyMsg))
 
-    # attachedFile = [fileName]
+    attachedFile = None
 
-    # send_email(subject, bodyMsg, sender, receivers, attachedFile)
+    send_email(subject, bodyMsg, sender, receivers, attachedFile)
     logging.info("Successfully sent email")
 
 
