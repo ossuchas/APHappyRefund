@@ -10,6 +10,10 @@ from datetime import datetime, timedelta
 import glob
 from dateutil.relativedelta import relativedelta
 
+import pandas as pd
+import urllib
+from sqlalchemy import create_engine
+
 
 class ConnectDB:
     def __init__(self):
@@ -143,8 +147,23 @@ def main(dfltVal):
         print("No Data Found..!!")
         logging.info("No Data found to process Data")
 
+    params = 'Driver={ODBC Driver 17 for SQL Server};Server=192.168.0.75;Database=db_iconcrm_fusion;uid=iconuser;pwd=P@ssw0rd;'
+    params = urllib.parse.quote_plus(params)
+
+    db = create_engine('mssql+pyodbc:///?odbc_connect=%s' % params, fast_executemany=True)
+
     for hyrf in hyrfs:
-        print(hyrf)
+        str_sql = """
+        SELECT fullname, email, remainingtotalamount FROM dbo.crm_contact_refund WHERE hyrf_id = {}
+        """.format(hyrf)
+
+        df = pd.read_sql(sql=str_sql, con=db)
+        
+        # assign variable 
+        full_name = df.iat[0, 0]
+        email = df.iat[0, 1]
+        remain_amt = df.iat[0, 2]
+        print(full_name, email, remain_amt)
     
     # last_month = datetime.now() - relativedelta(months=1)
 
