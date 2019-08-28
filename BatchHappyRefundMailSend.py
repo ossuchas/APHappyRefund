@@ -166,7 +166,8 @@ def main(dfltVal):
         print(full_name, email, remain_amt)
         
         logging.info("Send Mail Start")
-        sender = 'no-reply@apthai.com'
+        # sender = 'no-reply@apthai.com'
+        sender = 'happyrefund@apthai.com'
         receivers = ['suchat_s@apthai.com']
 
         subject = "{}-{}".format('test send mail happy refund', hyrf)
@@ -177,16 +178,14 @@ def main(dfltVal):
         send_email(subject, bodyMsg, sender, receivers, attachedFile)
         logging.info("Successfully sent email")
     
-    # # logging.info("Generate Data to Excel File Start")
-    # # genData2Xls(dfltVal[0], fileName)
-    # # logging.info("Generate Data to Excel File Finish")
+    logging.info("Send Mail to Customer Finish")
 
 if __name__ == '__main__':
     # Get Default Parameter from DB
     dfltVal = getDfltParam()
 
     # log_path = dfltVal[6]
-    log_path = '.'
+    log_path = '/home/ubuntu/tmp/log'
     logFile = log_path + '/BatchHappyRefundMailSend.log'
 
     logging.basicConfig(level=logging.DEBUG,
