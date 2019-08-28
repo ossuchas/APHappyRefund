@@ -170,7 +170,7 @@ def main(dfltVal):
         receivers = ['suchat_s@apthai.com']
 
         subject = "{}-{}".format('test send mail happy refund', hyrf)
-        bodyMsg = "{}".format('mail body')
+        bodyMsg = "{}".format('ทดสอบ mail body')
 
         attachedFile = []
 
