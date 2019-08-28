@@ -196,7 +196,7 @@ def main(dfltVal):
     # logging.debug("fileName = {}".format(fileName))
     # logging.debug("bodyMsg = {}".format(bodyMsg))
 
-    attachedFile = None
+    attachedFile = []
 
     send_email(subject, bodyMsg, sender, receivers, attachedFile)
     logging.info("Successfully sent email")
