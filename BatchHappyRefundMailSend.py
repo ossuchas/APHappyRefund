@@ -170,8 +170,8 @@ def main(dfltVal):
         sender = 'happyrefund@apthai.com'
         receivers = ['suchat_s@apthai.com']
 
-        subject = "{}-{}".format('test send mail happy refund', hyrf)
-        bodyMsg = "{}".format('ทดสอบ mail body')
+        subject = "{}-{}".format('[CRM-HappyRefund] Summary Report Gross', hyrf)
+        bodyMsg = "{}".format(' <p style="font-family:AP;">Dear All<br>                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This e-mail auto send from system and attached excel file for Gross/Cancel/Performance summary by LC at PERIOD_MONTH </p>')
 
         attachedFile = []
 
