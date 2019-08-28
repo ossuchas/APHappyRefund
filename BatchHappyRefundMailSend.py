@@ -1,18 +1,15 @@
-import smtplib
+import logging
 import os.path
+import smtplib
+import urllib
+from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from email.mime.application import MIMEApplication
-import pyodbc
-import xlwt
-import logging
-from datetime import datetime, timedelta
-import glob
-from dateutil.relativedelta import relativedelta
 
 import pandas as pd
-import urllib
 from sqlalchemy import create_engine
+
+import pyodbc
 
 
 class ConnectDB:
@@ -184,7 +181,6 @@ if __name__ == '__main__':
     # Get Default Parameter from DB
     dfltVal = getDfltParam()
 
-    # log_path = dfltVal[6]
     log_path = '/home/ubuntu/tmp/log'
     logFile = log_path + '/BatchHappyRefundMailSend.log'
 
