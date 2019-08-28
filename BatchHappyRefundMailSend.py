@@ -10,6 +10,12 @@ import pandas as pd
 from sqlalchemy import create_engine
 
 import pyodbc
+import re
+
+
+# Make a regular expression 
+# for validating an Email 
+regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
 
 
 class ConnectDB:
@@ -56,6 +62,15 @@ class ConnectDB:
 
     def __del__(self):
         self._cursor.close()
+
+
+def validateEmail(email):
+    # pass the regualar expression 
+    # and the string in search() method 
+    if(re.search(regex,email)):
+        return True
+    else:
+        return False
 
 
 def getDfltParam():
@@ -120,8 +135,9 @@ def getListData():
     --SELECT personcardid, fullname, nationality, mobile, email, contractnumber
     SELECT hyrf_id
     FROM dbo.crm_contact_refund
-    WHERE email LIKE '%_@__%.__%'
-      AND PATINDEX('%[^a-z,0-9,@,.,_,\-]%', email) = 0
+    WHERE 1=1
+    --AND email LIKE '%_@__%.__%'
+      --AND PATINDEX('%[^a-z,0-9,@,.,_,\-]%', email) = 0
 	  AND ISNULL(email_sent_status,'N') <> 'Y'
 	  ORDER BY createdate
     """
@@ -149,6 +165,7 @@ def main(dfltVal):
 
     db = create_engine('mssql+pyodbc:///?odbc_connect=%s' % params, fast_executemany=True)
 
+
     for hyrf in hyrfs:
         str_sql = """
         SELECT fullname, email, remainingtotalamount FROM dbo.crm_contact_refund WHERE hyrf_id = {}
@@ -160,7 +177,13 @@ def main(dfltVal):
         full_name = df.iat[0, 0]
         email = df.iat[0, 1]
         remain_amt = df.iat[0, 2]
-        print(full_name, email, remain_amt)
+        # print(full_name, email, remain_amt)
+
+        if not validateEmail(email):
+            print("Not valid email => {}".format(email))
+        else:
+            print("Valid email => {}".format(email))
+
         
         logging.info("Send Mail Start")
         # sender = 'no-reply@apthai.com'
