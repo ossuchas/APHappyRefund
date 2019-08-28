@@ -185,7 +185,7 @@ def main(dfltVal):
     logging.info("Send Mail Start")
     sender = 'no-reply@apthai.com'
     # receivers = dfltVal[2].split(';')
-    receivers = 'suchat_s@apthai.com'
+    receivers = ['suchat_s@apthai.com']
 
     subject = "{}".format('test send mail happy refund')
     # bodyMsg_tmp = dfltVal[4].replace("PERIOD_MONTH", vs_parm_date)
