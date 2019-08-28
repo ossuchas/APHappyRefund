@@ -164,43 +164,22 @@ def main(dfltVal):
         email = df.iat[0, 1]
         remain_amt = df.iat[0, 2]
         print(full_name, email, remain_amt)
+        
+        logging.info("Send Mail Start")
+        sender = 'no-reply@apthai.com'
+        receivers = ['suchat_s@apthai.com']
+
+        subject = "{}-{}".format('test send mail happy refund', hyrf)
+        bodyMsg = "{}".format('mail body')
+
+        attachedFile = []
+
+        send_email(subject, bodyMsg, sender, receivers, attachedFile)
+        logging.info("Successfully sent email")
     
-    # last_month = datetime.now() - relativedelta(months=1)
-
-    # # parameter date format dd/mm/yyyy for filename
-    # starting_day_of_current_year = format(datetime.now().date().replace(month=1, day=1), '%Y%m%d')
-    # yesterday = format(datetime.now() - timedelta(days=1), '%Y%m%d')
-
-    # # parameter date format dd/mm/yyyy for subject mail and body mail
-    # vs_parm_start = format(datetime.now().date().replace(month=1, day=1), '%d/%m/%Y')
-    # vs_parm_yest = format(datetime.now() - timedelta(days=1), '%d/%m/%Y')
-    # vs_parm_date = "{}-{}".format(vs_parm_start, vs_parm_yest)
-
-    # fileName = "{}_{}-{}.xls".format(dfltVal[1], starting_day_of_current_year, yesterday)
-
     # # logging.info("Generate Data to Excel File Start")
     # # genData2Xls(dfltVal[0], fileName)
     # # logging.info("Generate Data to Excel File Finish")
-
-    logging.info("Send Mail Start")
-    sender = 'no-reply@apthai.com'
-    # receivers = dfltVal[2].split(';')
-    receivers = ['suchat_s@apthai.com']
-
-    subject = "{}".format('test send mail happy refund')
-    # bodyMsg_tmp = dfltVal[4].replace("PERIOD_MONTH", vs_parm_date)
-    bodyMsg = "{}".format('mail body')
-
-    # logging.debug("receivers = {}".format(receivers))
-    # logging.debug("subject = {}".format(subject))
-    # logging.debug("fileName = {}".format(fileName))
-    # logging.debug("bodyMsg = {}".format(bodyMsg))
-
-    attachedFile = []
-
-    send_email(subject, bodyMsg, sender, receivers, attachedFile)
-    logging.info("Successfully sent email")
-
 
 if __name__ == '__main__':
     # Get Default Parameter from DB
