@@ -225,8 +225,7 @@ if __name__ == '__main__':
 
     mailSubject = dfltVal[0]
     mailBody = dfltVal[1]
-    # log_path = dfltVal[2]
-    log_path = '.'
+    log_path = dfltVal[2]
     
     logFile = log_path + '/BatchHappyRefundMailSend.log'
 
