@@ -142,14 +142,14 @@ def getListData():
 
     return returnVal
 
-def updateRefund(hyrf_id):
+def updateRefund(hyrf_id, send_status):
     myConnDB = ConnectDB()
 
-    params = (hyrf_id)
+    params = (send_status, hyrf_id)
 
     sqlStmt = """
     UPDATE dbo.crm_contact_refund
-    SET email_sent_status = 'Y',
+    SET email_sent_status = ?,
         email_sent_date = GETDATE()
     WHERE hyrf_id = ?
     """
@@ -199,8 +199,10 @@ def main(mailSubject, mailBody):
             logging.info("Successfully sent email")
 
             # Update Status Send Mail Success
-            updateRefund(hyrf_id=hyrf)
+            updateRefund(hyrf_id=hyrf, send_status='Y')
         else:
+            # Update Status Send Mail Format Error
+            updateRefund(hyrf_id=hyrf, send_status='E')
             logging.info("Not valid email => {}".format(email))
 
     logging.info("Send Mail to Customer Finish")
