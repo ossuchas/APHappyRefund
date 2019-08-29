@@ -156,7 +156,6 @@ def main(mailSubject, mailBody):
 
     db = create_engine('mssql+pyodbc:///?odbc_connect=%s' % params, fast_executemany=True)
 
-
     for hyrf in hyrfs:
         str_sql = """
         SELECT fullname, email, remainingtotalamount FROM dbo.crm_contact_refund WHERE hyrf_id = {}
@@ -168,30 +167,29 @@ def main(mailSubject, mailBody):
         full_name = df.iat[0, 0]
         email = df.iat[0, 1]
         remain_amt = df.iat[0, 2]
-        # print(full_name, email, remain_amt)
 
-        if not validateEmail(email):
-            print("Not valid email => {}".format(email))
-        else:
+        if validateEmail(email):
             print("Valid email => {}".format(email))
+            logging.info("Valid email => {}".format(email))
+            logging.info("Send Mail Start")
+            # sender = 'no-reply@apthai.com'
+            sender = 'happyrefund@apthai.com'
+            receivers = ['varunya@apthai.com;jutamas@apthai.com;penkhae@apthai.com;pornnapa@apthai.com;suchat_s@apthai.com']
+            # receivers = [email]
+            bodyMailtmp = mailBody.replace("{full_name}", full_name)
 
-        
-        logging.info("Send Mail Start")
-        # sender = 'no-reply@apthai.com'
-        sender = 'happyrefund@apthai.com'
-        receivers = ['varunya@apthai.com;jutamas@apthai.com;penkhae@apthai.com;pornnapa@apthai.com;suchat_s@apthai.com']
-        # receivers = [email]
-        bodyMailtmp = mailBody.replace("{full_name}", full_name)
+            subject = mailSubject
+            bodyMsg = "{}".format(bodyMailtmp)
+            print(bodyMsg)
 
-        subject = mailSubject
-        bodyMsg = "{}".format(bodyMailtmp)
-        print(bodyMsg)
+            attachedFile = []
 
-        attachedFile = []
+            send_email(subject, bodyMsg, sender, receivers, attachedFile)
+            logging.info("Successfully sent email")
+        else:
+            print("Not valid email => {}".format(email))
+            logging.info("Not valid email => {}".format(email))
 
-        send_email(subject, bodyMsg, sender, receivers, attachedFile)
-        logging.info("Successfully sent email")
-    
     logging.info("Send Mail to Customer Finish")
 
 if __name__ == '__main__':
