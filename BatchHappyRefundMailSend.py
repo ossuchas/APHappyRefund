@@ -182,11 +182,10 @@ def main(mailSubject, mailBody):
         remain_amt = df.iat[0, 2]
 
         if validateEmail(email):
-            print("Valid email => {}".format(email))
             logging.info("Valid email => {}".format(email))
             logging.info("Send Mail Start")
             sender = 'happyrefund@apthai.com'
-            receivers = ['varunya@apthai.com;jutamas@apthai.com;penkhae@apthai.com;pornnapa@apthai.com;suchat_s@apthai.com']
+            receivers = ['varunya@apthai.com','jutamas@apthai.com','penkhae@apthai.com','pornnapa@apthai.com','suchat_s@apthai.com']
             # receivers = [email]
             bodyMailtmp = mailBody.replace("{full_name}", full_name)
 
@@ -202,7 +201,6 @@ def main(mailSubject, mailBody):
             # Update Status Send Mail Success
             updateRefund(hyrf_id=hyrf)
         else:
-            print("Not valid email => {}".format(email))
             logging.info("Not valid email => {}".format(email))
 
     logging.info("Send Mail to Customer Finish")
