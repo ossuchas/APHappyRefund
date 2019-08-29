@@ -1,5 +1,6 @@
 import logging
 import os.path
+import re
 import smtplib
 import urllib
 from email.mime.application import MIMEApplication
@@ -10,10 +11,9 @@ import pandas as pd
 from sqlalchemy import create_engine
 
 import pyodbc
-import re
 
 # Make a regular expression 
-# for validating an Email 
+# for validating an Email1 
 regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
 
 
