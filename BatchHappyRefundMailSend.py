@@ -171,7 +171,10 @@ def main(mailSubject, mailBody):
 
     for hyrf in hyrfs:
         str_sql = """
-        SELECT fullname, email, remainingtotalamount FROM dbo.crm_contact_refund WHERE hyrf_id = {}
+        SELECT fullname, email, remainingtotalamount ,
+        format(transferdateapprove,N'dd MMMM พ.ศ. yyyy','th-TH') AS transferdateapprove,
+        addressnumber, unitnumber, project
+        FROM dbo.crm_contact_refund WHERE hyrf_id = {}
         """.format(hyrf)
 
         df = pd.read_sql(sql=str_sql, con=db)
@@ -180,6 +183,10 @@ def main(mailSubject, mailBody):
         full_name = df.iat[0, 0]
         email = df.iat[0, 1]
         remain_amt = df.iat[0, 2]
+        transfer_date = df.iat[0, 3]
+        address_no = df.iat[0, 4]
+        unit_no = df.iat[0, 5]
+        project = df.iat[0, 6]
 
         if validateEmail(email):
             logging.info("Valid email => {}".format(email))
@@ -189,6 +196,10 @@ def main(mailSubject, mailBody):
             receivers = ['suchat_s@apthai.com']
             # receivers = [email]
             bodyMailtmp = mailBody.replace("{full_name}", full_name)
+            bodyMailtmp = bodyMailtmp.replace("{transfer_date}", transfer_date)
+            bodyMailtmp = bodyMailtmp.replace("{project}", project)
+            bodyMailtmp = bodyMailtmp.replace("{address}", address_no)
+            bodyMailtmp = bodyMailtmp.replace("{unitno}", unit_no)
 
             subject = mailSubject
             bodyMsg = "{}".format(bodyMailtmp)
