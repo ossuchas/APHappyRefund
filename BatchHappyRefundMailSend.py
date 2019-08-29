@@ -73,19 +73,15 @@ def validateEmail(email):
 def getDfltParam():
     """
     index value
-    0 = SQL Statement for Main Query
-    1 = Excel File Name
-    2 = receivers ;
-    3 = Subject Mail
-    4 = Body Mail
-    5 = Footer Mail
-    6 = Log Path
+    0 = Subject Mail
+    1 = Body Mail
+    2 = Log Path
     """
 
     strSQL = """
-    SELECT long_desc 
+    SELECT remarks
     FROM dbo.CRM_Param
-    WHERE param_code = 'CRM_BG1_GRSC_XLS'
+    WHERE param_code = 'CRM_CS_REFUND'
     ORDER BY param_seqn
     """
 
@@ -94,7 +90,7 @@ def getDfltParam():
     returnVal = []
 
     for row in result_set:
-        returnVal.append(row.long_desc)
+        returnVal.append(row.remarks)
 
     return returnVal
 
@@ -133,8 +129,6 @@ def getListData():
     SELECT hyrf_id
     FROM dbo.crm_contact_refund
     WHERE 1=1
-    --AND email LIKE '%_@__%.__%'
-      --AND PATINDEX('%[^a-z,0-9,@,.,_,\-]%', email) = 0
 	  AND ISNULL(email_sent_status,'N') <> 'Y'
 	  ORDER BY createdate
     """
@@ -149,7 +143,7 @@ def getListData():
     return returnVal
 
 
-def main(dfltVal):
+def main(mailSubject, mailBody):
     # Get Project ID List
     hyrfs = getListData()
     
@@ -186,22 +180,15 @@ def main(dfltVal):
         # sender = 'no-reply@apthai.com'
         sender = 'happyrefund@apthai.com'
         receivers = ['suchat_s@apthai.com']
-        bodyMail = f'<p style="font-family:AP;">เรียนคุณ {full_name}<br /> \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ทางบริษัท เอพี (ไทยแลนด์) จำกัด (มหาชน)  ขอขอบคุณท่านเป็นอย่างสูงที่ได้ให้ความไว้วางใจที่มอบให้กับบริษัทฯ <br /> \
-และตามที่ท่านได้ชำระเงินมานั้น  มียอดเงินจำนวนหนึ่งที่ท่านชำระเงินเกินเข้ามาให้กับบริษัทฯ ซึ่งทางบริษัทฯ <br /> \
-ได้อำนวยความสะดวกเพิ่มช่องทางในการที่จะให้ท่านนำส่งเอกสาร  เพื่อยืนยันการคืนเงินส่วนที่ท่านชำระเงินเข้ามา <br /> \
-โดยสามารถเข้าไปที่ web site ของทางบริษัทฯ ตาม link  นี้ได้ทันที โดยรายละเอียดสามารถตรวจสอบได้จาก web site ของทางบริษัทฯ<br /> \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ทั้งนี้ หากท่านมีข้อสงสัยหรือต้องการสอบถามข้อมูลเพิ่มเติม สามารถติดต่อเจ้าหน้าที่ได้ที่หมายเลขโทรศัพท์ 0-2261-2518-22 ต่อ 999 หรือ 888 <br /><br  /> \
-  ช่องทางการคืนเงินให้กับลูกค้า : http://happyrefund.apthai.com <br /><br /> \
-  ขอขอบคุณและขอแสดงความนับถือ<br /> \
-  บริษัท เอพี (ไทยแลนด์) จำกัด (มหาชน)</p>'
+        bodyMailtmp = mailBody.replace("{full_name}", full_name)
 
-        subject = "{}-{}".format('[CRM-HappyRefund] Summary Report Gross', hyrf)
-        bodyMsg = "{}".format(bodyMail)
+        subject = mailSubject
+        bodyMsg = "{}".format(bodyMailtmp)
+        print(bodyMsg)
 
         attachedFile = []
 
-        send_email(subject, bodyMsg, sender, receivers, attachedFile)
+        # send_email(subject, bodyMsg, sender, receivers, attachedFile)
         logging.info("Successfully sent email")
     
     logging.info("Send Mail to Customer Finish")
@@ -210,7 +197,11 @@ if __name__ == '__main__':
     # Get Default Parameter from DB
     dfltVal = getDfltParam()
 
-    log_path = '/home/ubuntu/tmp/log'
+    mailSubject = dfltVal[0]
+    mailBody = dfltVal[1]
+    # log_path = dfltVal[2]
+    log_path = '.'
+    
     logFile = log_path + '/BatchHappyRefundMailSend.log'
 
     logging.basicConfig(level=logging.DEBUG,
@@ -221,6 +212,6 @@ if __name__ == '__main__':
 
     logging.debug('#####################')
     logging.info('Start Process')
-    main(dfltVal)
+    main(mailSubject, mailBody)
     logging.info('End Process')
     logging.debug('#####################')
