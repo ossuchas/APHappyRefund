@@ -12,7 +12,6 @@ from sqlalchemy import create_engine
 import pyodbc
 import re
 
-
 # Make a regular expression 
 # for validating an Email 
 regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
@@ -65,8 +64,6 @@ class ConnectDB:
 
 
 def validateEmail(email):
-    # pass the regualar expression 
-    # and the string in search() method 
     if(re.search(regex,email)):
         return True
     else:
@@ -189,9 +186,13 @@ def main(dfltVal):
         # sender = 'no-reply@apthai.com'
         sender = 'happyrefund@apthai.com'
         receivers = ['suchat_s@apthai.com']
+        bodyMail = 'ทางบริษัท เอพี (ไทยแลนด์) จำกัด (มหาชน)  ขอขอบคุณท่านเป็นอย่างสูงที่ได้ให้ความไว้วางใจที่มอบให้กับบริษัทฯ <br /> \
+และตามที่ท่านได้ชำระเงินมานั้น  มียอดเงินจำนวนหนึ่งที่ท่านชำระเงินเกินเข้ามาให้กับบริษัทฯ ซึ่งทางบริษัทฯ <br /> \
+ได้อำนวยความสะดวกเพิ่มช่องทางในการที่จะให้ท่านนำส่งเอกสาร  เพื่อยืนยันการคืนเงินส่วนที่ท่านชำระเงินเข้ามา <br /> \
+โดยสามารถเข้าไปที่ web site ของทางบริษัทฯ ตาม link  นี้ได้ทันที โดยรายละเอียดสามารถตรวจสอบได้จาก web site ของทางบริษัทฯ'
 
         subject = "{}-{}".format('[CRM-HappyRefund] Summary Report Gross', hyrf)
-        bodyMsg = "{}".format(' <p style="font-family:AP;">Dear All<br>                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This e-mail auto send from system and attached excel file for Gross/Cancel/Performance summary by LC at PERIOD_MONTH </p>')
+        bodyMsg = "{}".format(bodyMail)
 
         attachedFile = []
 
