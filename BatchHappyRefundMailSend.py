@@ -142,6 +142,19 @@ def getListData():
 
     return returnVal
 
+def updateRefund(hyrf_id):
+    myConnDB = ConnectDB()
+
+    params = (hyrf_id)
+
+    sqlStmt = """
+    UPDATE dbo.crm_contact_refund
+    SET email_sent_status = 'Y',
+        email_sent_date = GETDATE()
+    WHERE hyrf_id = ?
+    """
+    myConnDB.exec_sp(sqlStmt, params)
+    return
 
 def main(mailSubject, mailBody):
     # Get Project ID List
@@ -172,7 +185,6 @@ def main(mailSubject, mailBody):
             print("Valid email => {}".format(email))
             logging.info("Valid email => {}".format(email))
             logging.info("Send Mail Start")
-            # sender = 'no-reply@apthai.com'
             sender = 'happyrefund@apthai.com'
             receivers = ['varunya@apthai.com;jutamas@apthai.com;penkhae@apthai.com;pornnapa@apthai.com;suchat_s@apthai.com']
             # receivers = [email]
@@ -180,12 +192,15 @@ def main(mailSubject, mailBody):
 
             subject = mailSubject
             bodyMsg = "{}".format(bodyMailtmp)
-            print(bodyMsg)
 
             attachedFile = []
-
+            
+            # Send Email to Customer
             send_email(subject, bodyMsg, sender, receivers, attachedFile)
             logging.info("Successfully sent email")
+
+            # Update Status Send Mail Success
+            updateRefund(hyrf_id=hyrf)
         else:
             print("Not valid email => {}".format(email))
             logging.info("Not valid email => {}".format(email))
