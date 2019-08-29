@@ -161,7 +161,6 @@ def main(mailSubject, mailBody):
     hyrfs = getListData()
     
     if not hyrfs:
-        print("No Data Found..!!")
         logging.info("No Data found to process Data")
 
     params = 'Driver={ODBC Driver 17 for SQL Server};Server=192.168.0.75;Database=db_iconcrm_fusion;uid=iconuser;pwd=P@ssw0rd;'
