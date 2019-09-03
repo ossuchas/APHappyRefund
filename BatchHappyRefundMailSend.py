@@ -73,9 +73,11 @@ def validateEmail(email):
 def getDfltParam():
     """
     index value
-    0 = Subject Mail
-    1 = Body Mail
-    2 = Log Path
+    0 = Subject Mail for TH
+    1 = Body Mail for TH
+    2 = Log Path for TH
+    3 = Subject Mail for EN
+    4 = Body Mail for EN
     """
 
     strSQL = """
@@ -156,7 +158,8 @@ def updateRefund(hyrf_id, send_status):
     myConnDB.exec_sp(sqlStmt, params)
     return
 
-def main(mailSubject, mailBody):
+
+def main(mailSubject, mailBody, mailSubject_en, mailBody_en):
     # Get Project ID List
     hyrfs = getListData()
     
@@ -169,11 +172,21 @@ def main(mailSubject, mailBody):
     db = create_engine('mssql+pyodbc:///?odbc_connect=%s' % params, fast_executemany=True)
 
     for hyrf in hyrfs:
+        # str_sql = """
+        # SELECT fullname, email, remainingtotalamount ,
+        # format(transferdateapprove,N'dd MMMM พ.ศ. yyyy','th-TH') AS transferdateapprove,
+        # addressnumber, unitnumber, project
+        # FROM dbo.crm_contact_refund WHERE hyrf_id = {}
+        # """.format(hyrf)
+
         str_sql = """
-        SELECT fullname, email, remainingtotalamount ,
-        format(transferdateapprove,N'dd MMMM พ.ศ. yyyy','th-TH') AS transferdateapprove,
-        addressnumber, unitnumber, project
-        FROM dbo.crm_contact_refund WHERE hyrf_id = {}
+        SELECT a.fullname, a.email, a.remainingtotalamount ,
+        format(a.transferdateapprove,N'dd MMMM พ.ศ. yyyy','th-TH') AS transferdateapprove,
+        a.addressnumber, a.unitnumber, a.project
+		, a.foreigner, b.ProjectNameEng, format(a.transferdateapprove,N'dd MMMM yyyy') 
+        FROM dbo.crm_contact_refund a LEFT JOIN dbo.ICON_EntForms_Products b
+		ON a.productid = b.ProductID
+        WHERE a.hyrf_id = {}
         """.format(hyrf)
 
         df = pd.read_sql(sql=str_sql, con=db)
@@ -186,12 +199,25 @@ def main(mailSubject, mailBody):
         address_no = df.iat[0, 4]
         unit_no = df.iat[0, 5]
         project = df.iat[0, 6]
+        foreigner = df.iat[0, 7]
+        project_en = df.iat[0, 8]
+        transfer_date_en = df.iat[0, 9]
+
+        if foreigner == 'E':
+            project = project_en
+            transfer_date = transfer_date_en
+            mailSubject = mailSubject_en
+            mailBody = mailBody_en
 
         if validateEmail(email):
             logging.info("Valid email => {}".format(email))
             logging.info("Send Mail Start")
             sender = 'happyrefund@apthai.com'
-            receivers = ['varunya@apthai.com','jutamas@apthai.com','penkhae@apthai.com','pornnapa@apthai.com','suchat_s@apthai.com']
+            receivers = ['varunya@apthai.com',
+                         'jutamas@apthai.com',
+                         'penkhae@apthai.com',
+                         'pornnapa@apthai.com',
+                         'suchat_s@apthai.com']
             # receivers = ['suchat_s@apthai.com']
             # receivers = [email]
             bodyMailtmp = mailBody.replace("{full_name}", full_name)
@@ -218,6 +244,7 @@ def main(mailSubject, mailBody):
 
     logging.info("Send Mail to Customer Finish")
 
+
 if __name__ == '__main__':
     # Get Default Parameter from DB
     dfltVal = getDfltParam()
@@ -225,7 +252,9 @@ if __name__ == '__main__':
     mailSubject = dfltVal[0]
     mailBody = dfltVal[1]
     log_path = dfltVal[2]
-    
+    mailSubject_en = dfltVal[3]
+    mailBody_en = dfltVal[4]
+
     logFile = log_path + '/BatchHappyRefundMailSend.log'
 
     logging.basicConfig(level=logging.DEBUG,
@@ -236,6 +265,6 @@ if __name__ == '__main__':
 
     logging.debug('#####################')
     logging.info('Start Process')
-    main(mailSubject, mailBody)
+    main(mailSubject, mailBody, mailSubject_en, mailBody_en)
     logging.info('End Process')
     logging.debug('#####################')
