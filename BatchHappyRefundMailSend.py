@@ -127,11 +127,10 @@ def send_email(subject, message, from_email, to_email=[], attachment=[]):
 def getListData():
 
     strSQL = """
-    --SELECT personcardid, fullname, nationality, mobile, email, contractnumber
     SELECT hyrf_id
     FROM dbo.crm_contact_refund
     WHERE 1=1
-	  AND ISNULL(email_sent_status,'N') <> 'Y'
+	  AND ISNULL(email_sent_status,'N') NOT IN ('Y','E')
 	  ORDER BY createdate
     """
 
@@ -183,7 +182,7 @@ def main(mailSubject, mailBody, mailSubject_en, mailBody_en):
         SELECT a.fullname, a.email, a.remainingtotalamount ,
         format(a.transferdateapprove,N'dd MMMM พ.ศ. yyyy','th-TH') AS transferdateapprove,
         a.addressnumber, a.unitnumber, a.project
-		, a.foreigner, b.ProjectNameEng, format(a.transferdateapprove,N'dd MMMM yyyy') 
+        , a.foreigner, b.ProjectNameEng, format(a.transferdateapprove,N'dd MMMM yyyy') 
         FROM dbo.crm_contact_refund a LEFT JOIN dbo.ICON_EntForms_Products b
 		ON a.productid = b.ProductID
         WHERE a.hyrf_id = {}
@@ -203,7 +202,7 @@ def main(mailSubject, mailBody, mailSubject_en, mailBody_en):
         project_en = df.iat[0, 8]
         transfer_date_en = df.iat[0, 9]
 
-        if foreigner == 'E':
+        if foreigner == 'F':
             project = project_en
             transfer_date = transfer_date_en
             mailSubject = mailSubject_en
@@ -213,11 +212,7 @@ def main(mailSubject, mailBody, mailSubject_en, mailBody_en):
             logging.info("Valid email => {}".format(email))
             logging.info("Send Mail Start")
             sender = 'happyrefund@apthai.com'
-            receivers = ['varunya@apthai.com',
-                         'jutamas@apthai.com',
-                         'penkhae@apthai.com',
-                         'pornnapa@apthai.com',
-                         'suchat_s@apthai.com']
+            receivers = ['varunya@apthai.com', 'jutamas@apthai.com', 'penkhae@apthai.com', 'pornnapa@apthai.com', 'suchat_s@apthai.com']
             # receivers = ['suchat_s@apthai.com']
             # receivers = [email]
             bodyMailtmp = mailBody.replace("{full_name}", full_name)
