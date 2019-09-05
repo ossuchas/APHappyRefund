@@ -10,6 +10,7 @@ from datetime import datetime
 
 import uuid
 import random
+import time
 
 APP_NAME = "CRMREFUND"
 APIURL = 'http://192.168.0.40/smsapi/api/SMS/SendSMS'
@@ -155,11 +156,11 @@ def main(smsTH: str, smsEN: str):
         ref1 = df.iat[0, 2]
 
         # Kai Fix Mobile No.
-        mobile = '0830824173' # Kai
+        # mobile = '0830824173' # Kai
         # mobile = '0814584803' # Nam
         # mobile = '0844384171' # PFon
         # mobile = '0860554484' # PKae
-        # mobile = '0922464243' # Nid
+        mobile = '0922464243' # Nid
 
         if foreigner == 'F':
             sms_msg = smsEN
@@ -176,18 +177,20 @@ def main(smsTH: str, smsEN: str):
         logging.info("Successfully sent sms")
 
         dataobj = sms_json_model(mobile, sms_msg, ref1)
-        print(dataobj)
+        #print(dataobj)
         logging.info(dataobj)
 
         response = send_sms(dataobj)
         data = response.json()
         logging.info(data)
-        # print('Status Code : {}'.format(response.status_code))
-        # print('Status Message : {}'.format(data[0]['SendStatus']))
-        # print('Status Text : {}'.format(data[0]['Result']))
+        #print('Status Code : {}'.format(response.status_code))
+        #print('Status Message : {}'.format(data[0]['SendStatus']))
+        #print('Status Text : {}'.format(data[0]['Result']))
         logging.info('Status Code : {}'.format(response.status_code))
         logging.info('Status Message : {}'.format(data[0]['SendStatus']))
         logging.info('Status Text : {}'.format(data[0]['Result']))
+
+        time.sleep(2)
 
 
 def sms_json_model(mobile: str, sms_msg: str, ref1: str):
