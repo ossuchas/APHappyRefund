@@ -220,8 +220,8 @@ if __name__ == '__main__':
 
     smsTH = dfltVal[0]
     smsEN = dfltVal[1]
-    # log_path = dfltVal[2]
-    log_path = '.'
+    log_path = dfltVal[2]
+    # log_path = '.'
 
     logFile = log_path + '/BatchHappyRefundSendSMS.log'
 
