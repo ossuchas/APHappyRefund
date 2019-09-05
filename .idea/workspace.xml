@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7501dd9e-78b8-409a-ad9c-9af93db21ace" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/BatchHappyRefundSendSMS.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BatchHappyRefundSendSMS.py" beforeDir="false" afterPath="$PROJECT_DIR$/BatchHappyRefundSendSMS.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -12,15 +12,15 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/APHappyRefund$BatchHappyRefundSendSMS.coverage" NAME="BatchHappyRefundSendSMS Coverage Results" MODIFIED="1567578176247" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/APHappyRefund$BatchHappyRefundSendSMS.coverage" NAME="BatchHappyRefundSendSMS Coverage Results" MODIFIED="1567672915781" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/BatchHappyRefundMailSend.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="86">
-              <caret line="228" column="35" selection-start-line="228" selection-start-column="35" selection-end-line="228" selection-end-column="35" />
+            <state relative-caret-position="2720">
+              <caret line="172" selection-start-line="172" selection-end-line="172" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
               </folding>
@@ -28,15 +28,22 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/BatchHappyRefundSendSMS.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="42" column="9" selection-start-line="42" selection-start-column="9" selection-end-line="42" selection-end-column="9" />
+            <state relative-caret-position="18">
+              <caret line="177" column="8" selection-start-line="177" selection-start-column="8" selection-end-line="177" selection-end-column="8" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
             </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/BatchHappyRefundSendSMS.log">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-4440" />
           </provider>
         </entry>
       </file>
@@ -146,23 +153,25 @@
       <option name="presentableId" value="Default" />
       <updated>1567514454023</updated>
       <workItem from="1567514455971" duration="2306000" />
-      <workItem from="1567576342539" duration="1652000" />
+      <workItem from="1567576342539" duration="2338000" />
+      <workItem from="1567631431605" duration="3491000" />
+      <workItem from="1567668211637" duration="4495000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3958000" />
+    <option name="totallyTimeSpent" value="12630000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25340393" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26096824" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3289689" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.3289689" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -172,7 +181,7 @@
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Terminal" order="11" weight="0.3289689" />
-      <window_info anchor="bottom" id="Python Console" order="12" />
+      <window_info anchor="bottom" id="Python Console" order="12" weight="0.3289689" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -186,8 +195,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/BatchHappyRefundMailSend.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="86">
-          <caret line="228" column="35" selection-start-line="228" selection-start-column="35" selection-end-line="228" selection-end-column="35" />
+        <state relative-caret-position="2720">
+          <caret line="172" selection-start-line="172" selection-end-line="172" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
           </folding>
@@ -196,12 +205,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/BatchHappyRefundSendSMS.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="42" column="9" selection-start-line="42" selection-start-column="9" selection-end-line="42" selection-end-column="9" />
+        <state relative-caret-position="18">
+          <caret line="177" column="8" selection-start-line="177" selection-start-column="8" selection-end-line="177" selection-end-column="8" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BatchHappyRefundSendSMS.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4440" />
       </provider>
     </entry>
   </component>
