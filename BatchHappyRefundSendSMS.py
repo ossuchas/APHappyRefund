@@ -173,7 +173,7 @@ def main(smsTH: str, smsEN: str):
         logging.info("SMS Message = {}".format(sms_msg))
 
         # Update Status Send Mail Success
-        # updateRefund(hyrf_id=hyrf, send_status='Y')
+        updateRefund(hyrf_id=hyrf, send_status='Y')
         logging.info("Successfully sent sms")
 
         dataobj = sms_json_model(mobile, sms_msg, ref1)
