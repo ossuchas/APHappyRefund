@@ -12,9 +12,22 @@ from sqlalchemy import create_engine
 
 import pyodbc
 
+# for Logging
+import socket
+import os
+
 # Make a regular expression 
 # for validating an Email1 
 regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
+
+
+# for Logging
+def get_ipaddr():
+    try:
+        host_name = socket.gethostname()    
+        return socket.gethostbyname(host_name)
+    except:
+        return "Unable to get Hostname and IP"
 
 
 class ConnectDB:
@@ -213,8 +226,8 @@ def main(mailSubject, mailBody, mailSubject_en, mailBody_en):
             logging.info("Send Mail Start")
             sender = 'happyrefund@apthai.com'
             # receivers = ['varunya@apthai.com', 'jutamas@apthai.com', 'penkhae@apthai.com', 'pornnapa@apthai.com', 'suchat_s@apthai.com']
-            # receivers = ['suchat_s@apthai.com']
-            receivers = ['suchat.s14102526@gmail.com']
+            receivers = ['suchat_s@apthai.com']
+            # receivers = ['suchat.s14102526@gmail.com']
             # receivers = [email]
             bodyMailtmp = mailBody.replace("{full_name}", full_name)
             bodyMailtmp = bodyMailtmp.replace("{transfer_date}", transfer_date)
@@ -252,9 +265,13 @@ if __name__ == '__main__':
     mailBody_en = dfltVal[4]
 
     logFile = log_path + '/BatchHappyRefundMailSend.log'
+    
+    APPNAME=os.path.splitext(__file__)[0]
+    IPADDR=get_ipaddr()
+    FORMAT="%(asctime)-5s {} {}: [%(levelname)-8s] >> %(message)s".format(IPADDR, APPNAME)
 
     logging.basicConfig(level=logging.DEBUG,
-                        format='%(asctime)-5s [%(levelname)-8s] >> %(message)s',
+                        format=FORMAT,
                         datefmt='%Y-%m-%d %H:%M:%S',
                         filename=logFile,
                         filemode='a')
