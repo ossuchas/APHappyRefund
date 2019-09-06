@@ -12,8 +12,20 @@ import uuid
 import random
 import time
 
+# for Logging
+import socket
+import os
+
 APP_NAME = "CRMREFUND"
 APIURL = 'http://192.168.0.40/smsapi/api/SMS/SendSMS'
+
+# for Logging
+def get_ipaddr():
+    try:
+        host_name = socket.gethostname()    
+        return socket.gethostbyname(host_name)
+    except:
+        return "Unable to get Hostname and IP"
 
 
 class ConnectDB:
@@ -78,7 +90,7 @@ def getDfltParam():
 
     strSQL = """
     SELECT remarks
-    FROM dbo.CRM_Param
+    FROM dbo.CRM_Param WITH(NOLOCK)
     WHERE param_code = 'CRM_SMS_REFUND'
     ORDER BY param_seqn
     """
@@ -97,7 +109,7 @@ def getListData():
 
     strSQL = """
     SELECT hyrf_id
-    FROM dbo.crm_contact_refund
+    FROM dbo.crm_contact_refund WITH(NOLOCK)
     WHERE 1=1
 	  AND ISNULL(sms_sent_status,'N') NOT IN ('Y','E')
 	  ORDER BY createdate
@@ -224,9 +236,13 @@ if __name__ == '__main__':
     # log_path = '.'
 
     logFile = log_path + '/BatchHappyRefundSendSMS.log'
+    
+    APPNAME=os.path.splitext(__file__)[0]
+    IPADDR=get_ipaddr()
+    FORMAT="%(asctime)-5s {} {}: [%(levelname)-8s] >> %(message)s".format(IPADDR, APPNAME)
 
     logging.basicConfig(level=logging.DEBUG,
-                        format='%(asctime)-5s [%(levelname)-8s] >> %(message)s',
+                        format=FORMAT,
                         datefmt='%Y-%m-%d %H:%M:%S',
                         filename=logFile,
                         filemode='a')
