@@ -135,8 +135,8 @@ def updateRefund(hyrf_id, send_status):
 
     sqlStmt = """
     UPDATE dbo.crm_contact_refund
-    SET sms_sent_status = ?,
-        sms_sent_date = GETDATE()
+    SET sms_thx_sent_status = ?,
+        sms_thx_sent_date = GETDATE()
     WHERE hyrf_id = ?
     """
     myConnDB.exec_sp(sqlStmt, params)
