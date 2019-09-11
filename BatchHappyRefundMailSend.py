@@ -225,8 +225,8 @@ def main(mailSubject, mailBody, mailSubject_en, mailBody_en):
             logging.info("Valid email => {}".format(email))
             logging.info("Send Mail Start")
             sender = 'happyrefund@apthai.com'
-            # receivers = ['varunya@apthai.com', 'jutamas@apthai.com', 'penkhae@apthai.com', 'pornnapa@apthai.com', 'suchat_s@apthai.com']
-            receivers = ['suchat_s@apthai.com']
+            receivers = ['varunya@apthai.com', 'jutamas@apthai.com', 'penkhae@apthai.com', 'pornnapa@apthai.com', 'suchat_s@apthai.com', 'suchat.s14102526@gmail.com']
+            # receivers = ['suchat_s@apthai.com']
             # receivers = ['suchat.s14102526@gmail.com']
             # receivers = [email]
             bodyMailtmp = mailBody.replace("{full_name}", full_name)
@@ -266,7 +266,7 @@ if __name__ == '__main__':
 
     logFile = log_path + '/BatchHappyRefundMailSend.log'
     
-    APPNAME=os.path.splitext(__file__)[0]
+    APPNAME='BatchHappyRefundMailSend'
     IPADDR=get_ipaddr()
     FORMAT="%(asctime)-5s {} {}: [%(levelname)-8s] >> %(message)s".format(IPADDR, APPNAME)
 

@@ -83,15 +83,15 @@ def send_sms(dataobj):
 def getDfltParam():
     """
     index value
-    0 = SMS for TH
-    1 = SMS for Eng
+    0 = SMS Thank you for TH
+    1 = SMS Thank you for Eng
     2 = Log Path for TH
     """
 
     strSQL = """
     SELECT remarks
     FROM dbo.CRM_Param WITH(NOLOCK)
-    WHERE param_code = 'CRM_SMS_REFUND'
+    WHERE param_code = 'CRM_SMSTHX_REFUND'
     ORDER BY param_seqn
     """
 
@@ -111,7 +111,10 @@ def getListData():
     SELECT hyrf_id
     FROM dbo.crm_contact_refund WITH(NOLOCK)
     WHERE 1=1
-	  AND ISNULL(sms_sent_status,'N') NOT IN ('Y','E')
+    AND tf01_appv_flag = 'A' 
+    AND tf02_appv_flag = 'A' 
+    AND ac01_appv_flag = 'A' 
+    AND ac02_appv_flag = 'A'
 	  ORDER BY createdate
     """
 
@@ -181,7 +184,6 @@ def main(smsTH: str, smsEN: str):
 
         # Kai Random msg
         sms_msg = "{} ({})".format(sms_msg, random.randint(500, 50000))
-        # print("SMS Message = {}".format(sms_msg))
         logging.info("SMS Message = {}".format(sms_msg))
 
         # Update Status Send Mail Success
@@ -189,15 +191,11 @@ def main(smsTH: str, smsEN: str):
         logging.info("Successfully sent sms")
 
         dataobj = sms_json_model(mobile, sms_msg, ref1)
-        #print(dataobj)
         logging.info(dataobj)
 
         response = send_sms(dataobj)
         data = response.json()
         logging.info(data)
-        #print('Status Code : {}'.format(response.status_code))
-        #print('Status Message : {}'.format(data[0]['SendStatus']))
-        #print('Status Text : {}'.format(data[0]['Result']))
         logging.info('Status Code : {}'.format(response.status_code))
         logging.info('Status Message : {}'.format(data[0]['SendStatus']))
         logging.info('Status Text : {}'.format(data[0]['Result']))
@@ -235,9 +233,9 @@ if __name__ == '__main__':
     log_path = dfltVal[2]
     # log_path = '.'
 
-    logFile = log_path + '/BatchHappyRefundSendSMS.log'
+    logFile = log_path + '/BatchHappyRefundSendSMSThx.log'
     
-    APPNAME='BatchHappyRefundSendSMS'
+    APPNAME='BatchHappyRefundSendSMSThx'
     IPADDR=get_ipaddr()
     FORMAT="%(asctime)-5s {} {}: [%(levelname)-8s] >> %(message)s".format(IPADDR, APPNAME)
 
