@@ -168,8 +168,8 @@ def main(smsTH: str, smsEN: str):
         ref1 = df.iat[0, 2]
 
         # Kai Fix Mobile No.
-        mobile = '0830824173' # Kai
-        # mobile = '0814584803' # Nam
+        # mobile = '0830824173' # Kai
+        mobile = '0814584803' # Nam
         # mobile = '0844384171' # PFon
         # mobile = '0860554484' # PKae
         # mobile = '0922464243' # Nid

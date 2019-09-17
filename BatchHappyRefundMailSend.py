@@ -195,7 +195,7 @@ def main(mailSubject, mailBody, mailSubject_en, mailBody_en):
         SELECT a.fullname, a.email, a.remainingtotalamount ,
         format(a.transferdateapprove,N'dd MMMM พ.ศ. yyyy','th-TH') AS transferdateapprove,
         a.addressnumber, a.unitnumber, a.project
-        , a.foreigner, b.ProjectNameEng, format(a.transferdateapprove,N'dd MMMM yyyy') 
+        , a.foreigner, b.ProjectNameEng, format(a.transferdateapprove,N'dd MMMM yyyy'), a.productid
         FROM dbo.crm_contact_refund a LEFT JOIN dbo.ICON_EntForms_Products b
 		ON a.productid = b.ProductID
         WHERE a.hyrf_id = {}
@@ -214,6 +214,7 @@ def main(mailSubject, mailBody, mailSubject_en, mailBody_en):
         foreigner = df.iat[0, 7]
         project_en = df.iat[0, 8]
         transfer_date_en = df.iat[0, 9]
+        projectid = df.iat[0, 10]
 
         if foreigner == 'F':
             project = project_en
@@ -225,7 +226,7 @@ def main(mailSubject, mailBody, mailSubject_en, mailBody_en):
             logging.info("Valid email => {}".format(email))
             logging.info("Send Mail Start")
             sender = 'happyrefund@apthai.com'
-            receivers = ['varunya@apthai.com', 'jutamas@apthai.com', 'penkhae@apthai.com', 'pornnapa@apthai.com', 'suchat_s@apthai.com', 'suchat.s14102526@gmail.com']
+            receivers = ['varunya@apthai.com', 'jutamas@apthai.com', 'penkhae@apthai.com', 'pornnapa@apthai.com', 'suchat_s@apthai.com', 'suchat.s14102526@gmail.com', 'happyrefund@apthai.com']
             # receivers = ['suchat_s@apthai.com']
             # receivers = ['suchat.s14102526@gmail.com']
             # receivers = [email]
@@ -234,6 +235,7 @@ def main(mailSubject, mailBody, mailSubject_en, mailBody_en):
             bodyMailtmp = bodyMailtmp.replace("{project}", project)
             bodyMailtmp = bodyMailtmp.replace("{address}", address_no)
             bodyMailtmp = bodyMailtmp.replace("{unitno}", unit_no)
+            bodyMailtmp = bodyMailtmp.replace("{projectid}", projectid)
 
             subject = mailSubject
             bodyMsg = "{}".format(bodyMailtmp)

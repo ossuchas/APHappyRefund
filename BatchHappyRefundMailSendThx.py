@@ -147,6 +147,7 @@ def getListData():
     AND tf02_appv_flag = 'A'
     AND ac01_appv_flag = 'A'
     AND ac02_appv_flag = 'A'
+    AND ISNULL(email_thx_sent_status,'N') NOT IN ('Y','E')
 	  ORDER BY createdate
     """
 
@@ -190,9 +191,9 @@ def main(mailSubject, mailBody, mailSubject_en, mailBody_en):
 
         str_sql = """
         SELECT a.fullname, a.email, a.remainingtotalamount ,
-        format(a.transferdateapprove,N'dd MMMM พ.ศ. yyyy','th-TH') AS transferdateapprove,
+        format(a.ac02_due_date,N'dd MMMM พ.ศ. yyyy','th-TH') AS transferdateapprove,
         a.addressnumber, a.unitnumber, a.project
-        , a.foreigner, b.ProjectNameEng, format(a.transferdateapprove,N'dd MMMM yyyy') 
+        , a.foreigner, b.ProjectNameEng, format(a.ac02_due_date,N'dd MMMM yyyy') 
         FROM dbo.crm_contact_refund a LEFT JOIN dbo.ICON_EntForms_Products b
 		ON a.productid = b.ProductID
         WHERE a.hyrf_id = {}
@@ -222,15 +223,11 @@ def main(mailSubject, mailBody, mailSubject_en, mailBody_en):
             logging.info("Valid email => {}".format(email))
             logging.info("Send Mail Start")
             sender = 'happyrefund@apthai.com'
-            # receivers = ['varunya@apthai.com', 'jutamas@apthai.com', 'penkhae@apthai.com', 'pornnapa@apthai.com', 'suchat_s@apthai.com', 'suchat.s14102526@gmail.com']
+            # receivers = ['varunya@apthai.com', 'jutamas@apthai.com', 'penkhae@apthai.com', 'pornnapa@apthai.com', 'suchat_s@apthai.com', 'suchat.s14102526@gmail.com', 'happyrefund@apthai.com']
             receivers = ['suchat_s@apthai.com']
-            # receivers = ['suchat.s14102526@gmail.com']
             # receivers = [email]
             bodyMailtmp = mailBody.replace("{full_name}", full_name)
-            bodyMailtmp = bodyMailtmp.replace("{transfer_date}", transfer_date)
-            bodyMailtmp = bodyMailtmp.replace("{project}", project)
-            bodyMailtmp = bodyMailtmp.replace("{address}", address_no)
-            bodyMailtmp = bodyMailtmp.replace("{unitno}", unit_no)
+            bodyMailtmp = bodyMailtmp.replace("{due_date}", transfer_date)
 
             subject = mailSubject
             bodyMsg = "{}".format(bodyMailtmp)

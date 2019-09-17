@@ -115,6 +115,7 @@ def getListData():
     AND tf02_appv_flag = 'A' 
     AND ac01_appv_flag = 'A' 
     AND ac02_appv_flag = 'A'
+    AND ISNULL(sms_thx_sent_status,'N') NOT IN ('Y','E')
 	  ORDER BY createdate
     """
 
