@@ -197,9 +197,9 @@ def main(smsTH: str, smsEN: str):
         response = send_sms(dataobj)
         data = response.json()
         logging.info(data)
-        logging.info('Status Code : {}'.format(response.status_code))
-        logging.info('Status Message : {}'.format(data[0]['SendStatus']))
-        logging.info('Status Text : {}'.format(data[0]['Result']))
+        #logging.info('Status Code : {}'.format(response.status_code))
+        #logging.info('Status Message : {}'.format(data[0]['SendStatus']))
+        #logging.info('Status Text : {}'.format(data[0]['Result']))
 
         time.sleep(2)
 

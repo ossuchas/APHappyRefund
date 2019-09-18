@@ -198,9 +198,9 @@ def main(smsTH: str, smsEN: str):
         #print('Status Code : {}'.format(response.status_code))
         #print('Status Message : {}'.format(data[0]['SendStatus']))
         #print('Status Text : {}'.format(data[0]['Result']))
-        logging.info('Status Code : {}'.format(response.status_code))
-        logging.info('Status Message : {}'.format(data[0]['SendStatus']))
-        logging.info('Status Text : {}'.format(data[0]['Result']))
+        #logging.info('Status Code : {}'.format(response.status_code))
+        #logging.info('Status Message : {}'.format(data[0]['SendStatus']))
+        #logging.info('Status Text : {}'.format(data[0]['Result']))
 
         time.sleep(2)
 
