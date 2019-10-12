@@ -164,12 +164,12 @@ def main(smsTH: str, smsEN: str):
 
         # assign variable
         foreigner = df.iat[0, 0]
-        # mobile = df.iat[0, 1]
+        mobile = df.iat[0, 1]
         ref1 = df.iat[0, 2]
 
         # Kai Fix Mobile No.
         # mobile = '0830824173' # Kai
-        mobile = '0814584803' # Nam
+        # mobile = '0814584803' # Nam
         # mobile = '0844384171' # PFon
         # mobile = '0860554484' # PKae
         # mobile = '0922464243' # Nid
@@ -180,7 +180,8 @@ def main(smsTH: str, smsEN: str):
             sms_msg = smsTH
 
         # Kai Random msg
-        sms_msg = "{} ({})".format(sms_msg, random.randint(500, 50000))
+        # sms_msg = "{} ({})".format(sms_msg, random.randint(500, 50000))
+        sms_msg = "{}".format(sms_msg)
         # print("SMS Message = {}".format(sms_msg))
         logging.info("SMS Message = {}".format(sms_msg))
 
