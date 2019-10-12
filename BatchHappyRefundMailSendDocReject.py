@@ -225,7 +225,7 @@ def main(mailSubject, mailBody, mailSubject_en, mailBody_en):
             receivers = ['suchat_s@apthai.com']
             # receivers = [email]
             bodyMailtmp = mailBody.replace("{full_name}", full_name)
-            bodyMailtmp = bodyMailtmp.replace("{due_date}", transfer_date)
+            # bodyMailtmp = bodyMailtmp.replace("{due_date}", transfer_date)
 
             subject = mailSubject
             bodyMsg = "{}".format(bodyMailtmp)
