@@ -159,7 +159,7 @@ def main(smsTH: str, smsEN: str):
     for hyrf in hyrfs:
 
         str_sql = """
-        SELECT a.foreigner, a.mobile, a.transfernumber
+        SELECT a.foreigner, a.mobile, a.transfernumber, format(a.ac02_due_date,N'dd/MM/yyyy')
         FROM dbo.crm_contact_refund a WITH(NOLOCK)
         WHERE a.hyrf_id = {}
         """.format(hyrf)
@@ -168,11 +168,12 @@ def main(smsTH: str, smsEN: str):
 
         # assign variable
         foreigner = df.iat[0, 0]
-        # mobile = df.iat[0, 1]
+        mobile = df.iat[0, 1]
         ref1 = df.iat[0, 2]
+        due_date = df.iat[0, 3]
 
         # Kai Fix Mobile No.
-        mobile = '0830824173' # Kai
+        # mobile = '0830824173' # Kai
         # mobile = '0814584803' # Nam
         # mobile = '0844384171' # PFon
         # mobile = '0860554484' # PKae
@@ -184,7 +185,9 @@ def main(smsTH: str, smsEN: str):
             sms_msg = smsTH
 
         # Kai Random msg
-        sms_msg = "{} ({})".format(sms_msg, random.randint(500, 50000))
+        sms_msg_tmp = sms_msg.replace("{due_date}", due_date)
+        # sms_msg = "{} ({})".format(sms_msg_tmp, random.randint(500, 50000))
+        sms_msg = "{}".format(sms_msg_tmp)
         logging.info("SMS Message = {}".format(sms_msg))
 
         # Update Status Send Mail Success

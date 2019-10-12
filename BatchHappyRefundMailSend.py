@@ -226,10 +226,10 @@ def main(mailSubject, mailBody, mailSubject_en, mailBody_en):
             logging.info("Valid email => {}".format(email))
             logging.info("Send Mail Start")
             sender = 'happyrefund@apthai.com'
-            receivers = ['varunya@apthai.com', 'jutamas@apthai.com', 'penkhae@apthai.com', 'pornnapa@apthai.com', 'suchat_s@apthai.com', 'suchat.s14102526@gmail.com', 'happyrefund@apthai.com']
+            # receivers = ['varunya@apthai.com', 'jutamas@apthai.com', 'penkhae@apthai.com', 'pornnapa@apthai.com', 'suchat_s@apthai.com', 'happyrefund@apthai.com']
             # receivers = ['suchat_s@apthai.com']
             # receivers = ['suchat.s14102526@gmail.com']
-            # receivers = [email]
+            receivers = [email]
             bodyMailtmp = mailBody.replace("{full_name}", full_name)
             bodyMailtmp = bodyMailtmp.replace("{transfer_date}", transfer_date)
             bodyMailtmp = bodyMailtmp.replace("{project}", project)
