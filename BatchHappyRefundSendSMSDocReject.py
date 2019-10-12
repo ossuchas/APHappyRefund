@@ -111,7 +111,7 @@ def getListData():
     SELECT hyrf_id
     FROM dbo.crm_contact_refund WITH(NOLOCK)
     WHERE 1=1
-    AND ac03_change_due_flag = 'Y' 
+    AND ac03_reject_doc_flag = 'Y' 
     AND ISNULL(sms_reject_doc_status,'N') NOT IN ('Y','E')
 	  ORDER BY createdate
     """
@@ -194,13 +194,10 @@ def main(smsTH: str, smsEN: str):
         dataobj = sms_json_model(mobile, sms_msg, ref1)
         logging.info(dataobj)
 
-        response = send_sms(dataobj)
-        data = response.json()
-        logging.info(data)
-        #logging.info('Status Code : {}'.format(response.status_code))
-        #logging.info('Status Message : {}'.format(data[0]['SendStatus']))
-        #logging.info('Status Text : {}'.format(data[0]['Result']))
-
+        #response = send_sms(dataobj)
+        #data = response.json()
+        #logging.info(data)
+        
         time.sleep(2)
 
 
