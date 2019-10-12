@@ -96,7 +96,7 @@ def getDfltParam():
     strSQL = """
     SELECT remarks
     FROM dbo.CRM_Param
-    WHERE param_code = 'CRM_MAILDOCREJT_REFUND'
+    WHERE param_code = 'CRM_MAILCHANGEDUE_REFUND'
     ORDER BY param_seqn
     """
 
