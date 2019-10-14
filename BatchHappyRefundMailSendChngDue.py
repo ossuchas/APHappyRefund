@@ -16,15 +16,15 @@ import pyodbc
 import socket
 import os
 
-# Make a regular expression 
-# for validating an Email1 
+# Make a regular expression
+# for validating an Email1
 regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
 
 
 # for Logging
 def get_ipaddr():
     try:
-        host_name = socket.gethostname()    
+        host_name = socket.gethostname()
         return socket.gethostbyname(host_name)
     except:
         return "Unable to get Hostname and IP"
@@ -137,13 +137,14 @@ def send_email(subject, message, from_email, to_email=[], attachment=[]):
     email.quit()
     return;
 
+
 def getListData():
 
     strSQL = """
     SELECT hyrf_id
     FROM dbo.crm_contact_refund
     WHERE 1=1
-    AND ac03_change_due_flag = 'Y' 
+    AND ac03_change_due_flag = 'Y'
     AND ISNULL(email_change_due,'N') NOT IN ('Y','E')
 	  ORDER BY createdate
     """
@@ -176,7 +177,7 @@ def updateRefund(hyrf_id, send_status):
 def main(mailSubject, mailBody, mailSubject_en, mailBody_en):
     # Get Project ID List
     hyrfs = getListData()
-    
+
     if not hyrfs:
         logging.info("No Data found to process Data")
 
@@ -191,15 +192,15 @@ def main(mailSubject, mailBody, mailSubject_en, mailBody_en):
         SELECT a.fullname, a.email, a.remainingtotalamount ,
         format(a.ac02_due_date,N'dd MMMM พ.ศ. yyyy','th-TH') AS transferdateapprove,
         a.addressnumber, a.unitnumber, a.project
-        , a.foreigner, b.ProjectNameEng, format(a.ac02_due_date,N'dd MMMM yyyy') 
+        , a.foreigner, b.ProjectNameEng, format(a.ac02_due_date,N'dd MMMM yyyy')
         FROM dbo.crm_contact_refund a LEFT JOIN dbo.ICON_EntForms_Products b
 		ON a.productid = b.ProductID
         WHERE a.hyrf_id = {}
         """.format(hyrf)
 
         df = pd.read_sql(sql=str_sql, con=db)
-        
-        # assign variable 
+
+        # assign variable
         full_name = df.iat[0, 0]
         email = df.iat[0, 1]
         remain_amt = df.iat[0, 2]
@@ -231,7 +232,7 @@ def main(mailSubject, mailBody, mailSubject_en, mailBody_en):
             bodyMsg = "{}".format(bodyMailtmp)
 
             attachedFile = []
-            
+
             # Send Email to Customer
             send_email(subject, bodyMsg, sender, receivers, attachedFile)
             logging.info("Successfully sent email")
@@ -257,7 +258,7 @@ if __name__ == '__main__':
     mailBody_en = dfltVal[4]
 
     logFile = log_path + '/BatchHappyRefundMailSendChngDue.log'
-    
+
     APPNAME='BatchHappyRefundMailSendChngDue'
     IPADDR=get_ipaddr()
     FORMAT="%(asctime)-5s {} {}: [%(levelname)-8s] >> %(message)s".format(IPADDR, APPNAME)
