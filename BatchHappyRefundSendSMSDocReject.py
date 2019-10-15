@@ -8,13 +8,10 @@ import pandas as pd
 from sqlalchemy import create_engine
 from datetime import datetime
 
-import uuid
-import random
 import time
 
 # for Logging
 import socket
-import os
 
 APP_NAME = "CRMREFUND"
 APIURL = 'http://192.168.0.40/smsapi/api/SMS/SendSMS'
@@ -22,7 +19,7 @@ APIURL = 'http://192.168.0.40/smsapi/api/SMS/SendSMS'
 # for Logging
 def get_ipaddr():
     try:
-        host_name = socket.gethostname()    
+        host_name = socket.gethostname()
         return socket.gethostbyname(host_name)
     except:
         return "Unable to get Hostname and IP"
@@ -111,7 +108,7 @@ def getListData():
     SELECT hyrf_id
     FROM dbo.crm_contact_refund WITH(NOLOCK)
     WHERE 1=1
-    AND ac03_reject_doc_flag = 'Y' 
+    AND ac03_reject_doc_flag = 'Y'
     AND ISNULL(sms_reject_doc_status,'N') NOT IN ('Y','E')
 	  ORDER BY createdate
     """
@@ -182,7 +179,8 @@ def main(smsTH: str, smsEN: str):
             sms_msg = smsTH
 
         # Kai Random msg
-        sms_msg_tmp = sms_msg.replace("{due_date}", due_date)
+        # sms_msg_tmp = sms_msg.replace("{due_date}", due_date)
+        sms_msg_tmp = sms_msg
         # sms_msg = "{} ({})".format(sms_msg_tmp, random.randint(500, 50000))
         sms_msg = "{}".format(sms_msg_tmp)
         logging.info("SMS Message = {}".format(sms_msg))
@@ -194,10 +192,10 @@ def main(smsTH: str, smsEN: str):
         dataobj = sms_json_model(mobile, sms_msg, ref1)
         logging.info(dataobj)
 
-        #response = send_sms(dataobj)
-        #data = response.json()
-        #logging.info(data)
-        
+        response = send_sms(dataobj)
+        data = response.json()
+        logging.info(data)
+
         time.sleep(2)
 
 
@@ -232,7 +230,7 @@ if __name__ == '__main__':
     # log_path = '.'
 
     logFile = log_path + '/BatchHappyRefundSendSMSDocReject.log'
-    
+
     APPNAME='BatchHappyRefundSendSMSDocReject'
     IPADDR=get_ipaddr()
     FORMAT="%(asctime)-5s {} {}: [%(levelname)-8s] >> %(message)s".format(IPADDR, APPNAME)
