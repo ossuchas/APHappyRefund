@@ -223,8 +223,8 @@ def main(mailSubject, mailBody, mailSubject_en, mailBody_en):
             logging.info("Send Mail Start")
             sender = 'happyrefund@apthai.com'
             # receivers = ['varunya@apthai.com', 'jutamas@apthai.com', 'penkhae@apthai.com', 'pornnapa@apthai.com', 'suchat_s@apthai.com', 'happyrefund@apthai.com']
-            receivers = ['suchat_s@apthai.com']
-            # receivers = [email]
+            # receivers = ['suchat_s@apthai.com']
+            receivers = [email]
             bodyMailtmp = mailBody.replace("{full_name}", full_name)
             bodyMailtmp = bodyMailtmp.replace("{due_date}", transfer_date)
 
