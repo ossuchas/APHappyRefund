@@ -16,15 +16,15 @@ import pyodbc
 import socket
 import os
 
-# Make a regular expression 
-# for validating an Email1 
+# Make a regular expression
+# for validating an Email1
 regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
 
 
 # for Logging
 def get_ipaddr():
     try:
-        host_name = socket.gethostname()    
+        host_name = socket.gethostname()
         return socket.gethostbyname(host_name)
     except:
         return "Unable to get Hostname and IP"
@@ -132,7 +132,8 @@ def send_email(subject, message, from_email, to_email=[], attachment=[]):
         part['Content-Disposition'] = 'attachment; filename="%s"' % basename
         msg.attach(part)
 
-    email = smtplib.SMTP('aphubtran01.ap-thai.com', 25)
+    # email = smtplib.SMTP('aphubtran01.ap-thai.com', 25)
+    email = smtplib.SMTP('apmail.apthai.com', 25)
     email.sendmail(from_email, to_email, msg.as_string())
     email.quit()
     return;
@@ -174,7 +175,7 @@ def updateRefund(hyrf_id, send_status):
 def main(mailSubject, mailBody, mailSubject_en, mailBody_en):
     # Get Project ID List
     hyrfs = getListData()
-    
+
     if not hyrfs:
         logging.info("No Data found to process Data")
 
@@ -202,8 +203,8 @@ def main(mailSubject, mailBody, mailSubject_en, mailBody_en):
         """.format(hyrf)
 
         df = pd.read_sql(sql=str_sql, con=db)
-        
-        # assign variable 
+
+        # assign variable
         full_name = df.iat[0, 0]
         email = df.iat[0, 1]
         remain_amt = df.iat[0, 2]
@@ -241,7 +242,7 @@ def main(mailSubject, mailBody, mailSubject_en, mailBody_en):
             bodyMsg = "{}".format(bodyMailtmp)
 
             attachedFile = []
-            
+
             # Send Email to Customer
             send_email(subject, bodyMsg, sender, receivers, attachedFile)
             logging.info("Successfully sent email")
@@ -267,7 +268,7 @@ if __name__ == '__main__':
     mailBody_en = dfltVal[4]
 
     logFile = log_path + '/BatchHappyRefundMailSend.log'
-    
+
     APPNAME='BatchHappyRefundMailSend'
     IPADDR=get_ipaddr()
     FORMAT="%(asctime)-5s {} {}: [%(levelname)-8s] >> %(message)s".format(IPADDR, APPNAME)

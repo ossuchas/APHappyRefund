@@ -132,7 +132,8 @@ def send_email(subject, message, from_email, to_email=[], attachment=[]):
         part['Content-Disposition'] = 'attachment; filename="%s"' % basename
         msg.attach(part)
 
-    email = smtplib.SMTP('aphubtran01.ap-thai.com', 25)
+    # email = smtplib.SMTP('aphubtran01.ap-thai.com', 25)
+    email = smtplib.SMTP('apmail.apthai.com', 25)
     email.sendmail(from_email, to_email, msg.as_string())
     email.quit()
     return;
