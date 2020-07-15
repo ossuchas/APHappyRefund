@@ -17,6 +17,7 @@ import socket
 import os
 
 APP_NAME = "CRMREFUND"
+# Modified by Suchat S. 2020-07-15 for change API Endpoint to randdom file name
 # APIURL = 'http://192.168.0.40/smsapi/api/SMS/SendSMS'
 APIURL = 'http://smsapi-smsapi.devops-app.apthai.com/api/sms/SendSMS'
 
